@@ -8,38 +8,46 @@ API_KEY='AIzaSyB-RXon7sorCRGKIOg5JF4vTsTn2NTEb3U';
 function getVotesAll() {
   var query = "SELECT TID, ups, downs FROM " + VOTES;
   ft2json.query(query, function(result) {
-    console.log(result);
-    $("#ft-data").html(result);
+    console.log(result.data);
     });
 }
 function getVotes(TID) {
   var query = "SELECT TID, ups, downs FROM " + VOTES + " WHERE TID="+TID;
   ft2json.query(query, function(result) {
-    console.log(result);
+    console.log(result.data[0]); //only 1 result
     });
 }
 
 function getTraitsAll() {
    var query = "SELECT PID, TID, text FROM " + TRAITS;
    ft2json.query(query, function(result) {
-      console.log(result);
+      console.log(result.data);
     });
 }
 function getTraitsByPerson(PID) {
    var query = "SELECT PID, TID, text FROM " + TRAITS + " WHERE PID="+PID;
    ft2json.query(query, function(result) {
-      console.log(result);
+      console.log(result.data);
     });
 }
 function getTraitsByTID(TID) {
    var query = "SELECT PID, TID, text FROM " + TRAITS + " WHERE TID="+TID;
    ft2json.query(query, function(result) {
-      console.log(result);
+      console.log(result.data);
     });
 }
 function getTraitsAndVotesByPerson(PID) {
   var query = "SELECT TID, text, ups, downs FROM " + TRAITS_VOTES + " WHERE PID="+PID;
    ft2json.query(query, function(result) {
-      console.log(result);
+      console.log(result.data);
     });
 }
+
+function getSummedVotesByPerson (PID) {
+  var query = "SELECT sum(ups) as sumups, sum(downs) as sumdowns FROM " + TRAITS_VOTES + " WHERE PID="+PID;
+   ft2json.query(query, function(result) {
+      console.log(result.data[0]); //only 1 result 
+    });
+}
+
+
