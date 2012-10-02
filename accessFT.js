@@ -27,7 +27,10 @@ function getTraitsAll() {
 function getTraitsByPerson(PID) {
    var query = "SELECT PID, TID, text FROM " + TRAITS + " WHERE PID="+PID;
    ft2json.query(query, function(result) {
-      console.log(result.data);
+   console.log(result);
+      for (var i=0; i<result.data.length; i++) {
+      	$('ul').append("<li>"+result.data[i].text+"</li>");
+      	 }
     });
 }
 function getTraitsByTID(TID) {
@@ -51,3 +54,4 @@ function getSummedVotesByPerson (PID) {
 }
 
 
+getTraitsByPerson(0);
