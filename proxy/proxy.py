@@ -111,8 +111,8 @@ def updateVote (ft_client, table, TID, columnName):
 '''
 verifies if a token is correct from the people table 
 '''
-def verifyToken (ft_client, table, PID, token):
-	query= "SELECT ROWID, PID, token FROM %s  AS t where PID='%s';" % (table, PID)
+def verifyToken (ft_client, table, email, token):
+	query= "SELECT ROWID, PID, token FROM %s  AS t where email='%s';" % (table, email)
 	q=ft_client.query(query)
 	d=makeDict(q)
 	if (len(d['PID'])==0) :
@@ -132,7 +132,7 @@ def updateToken (ft_client, table, rowid, token):
 	q=ft_client.query(query)
 	return True
 
-
+# referenced http://kutuma.blogspot.com/2007/08/sending-emails-via-gmail-with-python.html
 def sendEmail (gmail_user, gmail_pwd, to, token):
     msg = MIMEMultipart()
 
@@ -183,6 +183,30 @@ http://stackoverflow.com/questions/2257441/python-random-string-generation-with-
 def generateToken(size=8, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for x in range(size))
 
+
+
+
+def addTrait (ft_client, table, PID, trait_text):
+	# calc the new TID
+	#print "add trait"
+	query= 'SELECT TID FROM '+table+";";
+	#print query
+	d=makeDict(ft_client.query(query))
+	#print(d)
+	newID = findNextID(d, 'TID')
+	query = "INSERT INTO %s (PID, TID, text) VALUES (%s, %s, '%s');" % (table, PID, newID, trait_text)
+	#print query
+	q=ft_client.query(query)
+
+	return True
+
+
+
+
+
+
+
+########################################################################################
 print "Content-type:text/plain\r\n\r\n"
 
 
@@ -191,21 +215,24 @@ ft_client = ftclient.ClientLoginFTClient(token)
 
 postData=cgi.FieldStorage()
 action = postData.getvalue('action')
-
 if action== "update_vote":
 	TID = postData.getvalue('TID')
 	columnName=postData.getvalue('columnName')
 	updateVote(ft_client, config.VOTES, TID, columnName)
 
 elif action == "verify_token":
-	PID = postData.getvalue('PID')
+	email = postData.getvalue('email') #email address
 	in_token=postData.getvalue('token')
-	print verifyToken(ft_client, config.PEOPLE, PID, in_token) # True or False
+	print verifyToken(ft_client, config.PEOPLE, email, in_token) # True or False
 
 elif action == "get_token":
 	#assumes all the emails are already in the Fusion Table
 	in_email= postData.getvalue('email')
 	print newOrGetToken (ft_client, config.PEOPLE, in_email, config.USERNAME, config.PASSWORD)
+elif action =="add_trait":
+	PID = postData.getvalue('PID')
+	trait = postData.getvalue('trait')
+	addTrait(ft_client, config.TRAITS, PID, trait)
 
 
 #query= 'SELECT ROWID, TID, ups, downs FROM '+config.VOTES+" AS t where TID=2;"
