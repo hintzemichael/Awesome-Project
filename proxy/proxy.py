@@ -183,6 +183,30 @@ http://stackoverflow.com/questions/2257441/python-random-string-generation-with-
 def generateToken(size=8, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for x in range(size))
 
+
+
+
+def addTrait (ft_client, table, PID, trait_text):
+	# calc the new TID
+	#print "add trait"
+	query= 'SELECT TID FROM '+table+";";
+	#print query
+	d=makeDict(ft_client.query(query))
+	#print(d)
+	newID = findNextID(d, 'TID')
+	query = "INSERT INTO %s (PID, TID, text) VALUES (%s, %s, '%s');" % (table, PID, newID, trait_text)
+	#print query
+	q=ft_client.query(query)
+
+	return True
+
+
+
+
+
+
+
+########################################################################################
 print "Content-type:text/plain\r\n\r\n"
 
 
@@ -191,7 +215,6 @@ ft_client = ftclient.ClientLoginFTClient(token)
 
 postData=cgi.FieldStorage()
 action = postData.getvalue('action')
-
 if action== "update_vote":
 	TID = postData.getvalue('TID')
 	columnName=postData.getvalue('columnName')
@@ -206,6 +229,10 @@ elif action == "get_token":
 	#assumes all the emails are already in the Fusion Table
 	in_email= postData.getvalue('email')
 	print newOrGetToken (ft_client, config.PEOPLE, in_email, config.USERNAME, config.PASSWORD)
+elif action =="add_trait":
+	PID = postData.getvalue('PID')
+	trait = postData.getvalue('trait')
+	addTrait(ft_client, config.TRAITS, PID, trait)
 
 
 #query= 'SELECT ROWID, TID, ups, downs FROM '+config.VOTES+" AS t where TID=2;"
