@@ -111,8 +111,8 @@ def updateVote (ft_client, table, TID, columnName):
 '''
 verifies if a token is correct from the people table 
 '''
-def verifyToken (ft_client, table, PID, token):
-	query= "SELECT ROWID, PID, token FROM %s  AS t where PID='%s';" % (table, PID)
+def verifyToken (ft_client, table, email, token):
+	query= "SELECT ROWID, PID, token FROM %s  AS t where email='%s';" % (table, email)
 	q=ft_client.query(query)
 	d=makeDict(q)
 	if (len(d['PID'])==0) :
@@ -132,7 +132,7 @@ def updateToken (ft_client, table, rowid, token):
 	q=ft_client.query(query)
 	return True
 
-
+# referenced http://kutuma.blogspot.com/2007/08/sending-emails-via-gmail-with-python.html
 def sendEmail (gmail_user, gmail_pwd, to, token):
     msg = MIMEMultipart()
 
@@ -198,9 +198,9 @@ if action== "update_vote":
 	updateVote(ft_client, config.VOTES, TID, columnName)
 
 elif action == "verify_token":
-	PID = postData.getvalue('PID')
+	email = postData.getvalue('email') #email address
 	in_token=postData.getvalue('token')
-	print verifyToken(ft_client, config.PEOPLE, PID, in_token) # True or False
+	print verifyToken(ft_client, config.PEOPLE, email, in_token) # True or False
 
 elif action == "get_token":
 	#assumes all the emails are already in the Fusion Table
