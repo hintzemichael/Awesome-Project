@@ -5,7 +5,14 @@ import cgi
 import cgitb
 import ftclient
 import os, string, random
-cgitb.enable()
+import smtplib
+
+from email.MIMEMultipart import MIMEMultipart
+from email.MIMEBase import MIMEBase
+from email.MIMEText import MIMEText
+from email import Encoders
+
+#cgitb.enable()
 
 
 '''
@@ -38,30 +45,30 @@ def makeDict (string):
 	return d
 
 
-'''
-give either a string '1' or int 1
-returns a dict {'ups': int, 'downs': int}
--1 -1 if not found
-'''
-'''
-def getVote (votesDict, TID):
-	d = {'ups': -1, 'downs': -1}
+# '''
+# give either a string '1' or int 1
+# returns a dict {'ups': int, 'downs': int}
+# -1 -1 if not found
+# '''
+# '''
+# def getVote (votesDict, TID):
+# 	d = {'ups': -1, 'downs': -1}
 
-	try:
-		#cast to string first
-		if type(TID) is int:
-			TID = str(TID)
-		index=votesDict['TID'].index(TID)
-		print (index)
-		d['ups']=votesDict['ups'][index]
-		print votesDict['ups'][index]
-		d['downs']=votesDict['downs'][index]
-		print votesDict['downs'][index]
-		return d
-	except:
-		#TID not found
-		return d
-'''
+# 	try:
+# 		#cast to string first
+# 		if type(TID) is int:
+# 			TID = str(TID)
+# 		index=votesDict['TID'].index(TID)
+# 		print (index)
+# 		d['ups']=votesDict['ups'][index]
+# 		print votesDict['ups'][index]
+# 		d['downs']=votesDict['downs'][index]
+# 		print votesDict['downs'][index]
+# 		return d
+# 	except:
+# 		#TID not found
+# 		return d
+# '''
 '''
 assumes columnName is correct in the given dict
 '''
@@ -118,6 +125,58 @@ def verifyToken (ft_client, table, PID, token):
 		else:
 			return False
 
+
+def updateToken (ft_client, table, rowid, token):
+	query = "UPDATE %s SET token = '%s' WHERE ROWID = '%s'" % (table, token, rowid)
+	print(query)
+	q=ft_client.query(query)
+	return True
+
+
+def sendEmail (gmail_user, gmail_pwd, to, token):
+    msg = MIMEMultipart()
+
+    msg['From'] = gmail_user
+    msg['To'] = to
+    msg['Subject'] = 'Know Thyself Account'
+    content = "Hello\n\nYour Know Thyself login token is: "+token +"\n\n Thank you!"
+   
+    msg.attach(MIMEText(content))
+    mailServer = smtplib.SMTP("smtp.gmail.com", 587)
+    mailServer.ehlo()
+    mailServer.starttls()
+    mailServer.ehlo()
+    mailServer.login(gmail_user, gmail_pwd)
+    mailServer.sendmail(gmail_user, to, msg.as_string())
+    # Should be mailServer.quit(), but that crashes...
+    mailServer.close()
+    return True
+
+
+def newOrGetToken (ft_client, table, email, sender_user, sender_pwd):
+	query= 'SELECT email, token, ROWID FROM '+table+" where email='%s';" % email;
+	print query
+	d=makeDict(ft_client.query(query))
+	print(d)
+	# is it a valid email address?
+
+	if len(d['email'])==0:
+		return "NOT_FOUND"
+	elif d['token'][0].strip()=='':
+		# unregistered? generate token and send email
+		newToken=generateToken()
+		print(newToken)
+		if updateToken (ft_client, table, d['rowid'][0], newToken) and sendEmail(sender_user, sender_pwd, email, newToken):
+			return "GENERATED"
+		
+		return "SOMETHING_WRONG" #should not happen
+	else:
+		# is the user registered? if so send back the token
+		if sendEmail(sender_user, sender_pwd, email, d['token'][0]):
+			return "RESENT"
+		return "SOMETHING_WRONG"
+
+
 '''
 http://stackoverflow.com/questions/2257441/python-random-string-generation-with-upper-case-letters-and-digits
 '''
@@ -134,15 +193,19 @@ postData=cgi.FieldStorage()
 action = postData.getvalue('action')
 
 if action== "update_vote":
-		TID = postData.getvalue('TID')
-		columnName=postData.getvalue('columnName')
-		updateVote(ft_client, config.VOTES, TID, columnName)
+	TID = postData.getvalue('TID')
+	columnName=postData.getvalue('columnName')
+	updateVote(ft_client, config.VOTES, TID, columnName)
 
 elif action == "verify_token":
-		PID = postData.getvalue('PID')
-		in_token=postData.getvalue('token')
-		print verifyToken(ft_client, config.PEOPLE, PID, in_token) # True or False
+	PID = postData.getvalue('PID')
+	in_token=postData.getvalue('token')
+	print verifyToken(ft_client, config.PEOPLE, PID, in_token) # True or False
 
+elif action == "get_token":
+	#assumes all the emails are already in the Fusion Table
+	in_email= postData.getvalue('email')
+	print newOrGetToken (ft_client, config.PEOPLE, in_email, config.USERNAME, config.PASSWORD)
 
 
 #query= 'SELECT ROWID, TID, ups, downs FROM '+config.VOTES+" AS t where TID=2;"
@@ -152,8 +215,6 @@ elif action == "verify_token":
 #print updateVote(ft_client, config.VOTES, 6, 'ups')
 #print verifyToken(ft_client, config.PEOPLE, 0, 'q1w2e3')
 #print generateToken()
-
-
 
 
 #votes=makeDict(q)
