@@ -234,6 +234,7 @@ elif action =="add_trait":
 	trait = postData.getvalue('trait')
 	addTrait(ft_client, config.TRAITS, PID, trait)
 
+{action='update_vote', TID='3', columnName='ups'}
 
 #query= 'SELECT ROWID, TID, ups, downs FROM '+config.VOTES+" AS t where TID=2;"
 #print query
