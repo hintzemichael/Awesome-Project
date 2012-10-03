@@ -12,7 +12,7 @@ from email.MIMEBase import MIMEBase
 from email.MIMEText import MIMEText
 from email import Encoders
 
-#cgitb.enable()
+cgitb.enable()
 
 
 '''
@@ -155,9 +155,9 @@ def sendEmail (gmail_user, gmail_pwd, to, token):
 
 def newOrGetToken (ft_client, table, email, sender_user, sender_pwd):
 	query= 'SELECT email, token, ROWID FROM '+table+" where email='%s';" % email;
-	print query
+	#print query
 	d=makeDict(ft_client.query(query))
-	print(d)
+	#print(d)
 	# is it a valid email address?
 
 	if len(d['email'])==0:
@@ -165,7 +165,7 @@ def newOrGetToken (ft_client, table, email, sender_user, sender_pwd):
 	elif d['token'][0].strip()=='':
 		# unregistered? generate token and send email
 		newToken=generateToken()
-		print(newToken)
+		#print(newToken)
 		if updateToken (ft_client, table, d['rowid'][0], newToken) and sendEmail(sender_user, sender_pwd, email, newToken):
 			return "GENERATED"
 		
@@ -222,7 +222,7 @@ elif action == "get_token":
 
 #v= getVote(votes, 0)
 #print (v)
-
+#print newOrGetToken (ft_client, config.PEOPLE, 'ruidai@ischool.berkeley.edu', config.USERNAME, config.PASSWORD)
 #updateVote(ft_client, config.VOTES, 'TID', '1', 'ups', '8')
 
 #print findNextID(votes,'TID')
