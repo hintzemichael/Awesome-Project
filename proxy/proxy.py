@@ -207,7 +207,7 @@ def addTrait (ft_client, table, PID, trait_text):
 
 
 ########################################################################################
-print "Content-type:text/plain\r\n\r\n"
+print "Content-type:text/plain\r\nAccess-Control-Allow-Origin: *\r\n"
 
 
 token = ClientLogin().authorize(config.USERNAME, config.PASSWORD)
@@ -233,8 +233,6 @@ elif action =="add_trait":
 	PID = postData.getvalue('PID')
 	trait = postData.getvalue('trait')
 	addTrait(ft_client, config.TRAITS, PID, trait)
-
-{action='update_vote', TID='3', columnName='ups'}
 
 #query= 'SELECT ROWID, TID, ups, downs FROM '+config.VOTES+" AS t where TID=2;"
 #print query
