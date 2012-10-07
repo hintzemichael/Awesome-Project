@@ -28,6 +28,8 @@ function getTraitsAll() {
 
 
 function getTraitsByPerson(PID) {
+
+  $('ul').empty();
    var query = "SELECT PID, TID, text FROM " + TRAITS + " WHERE PID="+PID;
    ft2json.query(query, function(result) {
    console.log(result);
@@ -98,18 +100,20 @@ function getSummedVotesByPerson (PID) {
 }
 
 
-function agreeClick() {
-  console.log(self);
-}
 
-$(document).ready(function() {
+
+$(document).on('ready', function() {
 
   console.log('document ready');
-$("#vote-down").on('click', function() {
 
-  console.log("vote down click");
-});
 
 });
+
+  // $('.carousel').load('people.html', function(){
+  //   console.log($('.carousel-item:first-child')[0]);
+  //   $('.carousel-item:first-child').show();
+
+
+  // });
 getTraitsByPerson(0);
 

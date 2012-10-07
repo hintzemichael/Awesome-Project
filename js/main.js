@@ -102,11 +102,15 @@
 
 				if( cssTransitionsSupport ){
 					$self[ pluginName ]( "_transitionStart", $from, $to, reverse );
+
 				} else {
 					$to.addClass( activeClass );
 					$self[ pluginName ]( "_transitionEnd", $from, $to, reverse );
 				}
-
+				
+				var to_id=$to[0].getAttribute('id');
+				console.log('to: '+to_id);
+				getTraitsByPerson(to_id);
 				// added to allow pagination to track
 				$self.trigger( "goto." + pluginName, $to );
 			},
@@ -143,6 +147,7 @@
 							$elem[ pluginName ]( targ.is( "[href='#next']" ) ? "next" : "prev" );
 							e.preventDefault();
 						}
+
 					});
 				
 				return this;
