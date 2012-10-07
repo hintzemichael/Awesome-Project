@@ -192,10 +192,10 @@ a:hover {
     margin-top: -5px;
     padding: 5px 7px;
 }
-#vote-up {
+.vote-up {
   right: 150px;
 }
-#vote-down {
+.vote-down {
   right: 50px;
 }
 a.button {

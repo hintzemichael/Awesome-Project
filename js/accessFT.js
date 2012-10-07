@@ -24,13 +24,56 @@ function getTraitsAll() {
       console.log(result.data);
     });
 }
+
+
+
 function getTraitsByPerson(PID) {
    var query = "SELECT PID, TID, text FROM " + TRAITS + " WHERE PID="+PID;
    ft2json.query(query, function(result) {
    console.log(result);
       for (var i=0; i<result.data.length; i++) {
-      	$('ul').append("<li id='"+result.data[i].TID+"'>"+result.data[i].text+'<a id="vote-up" class="vote-btn gray button" href="">Agree</a><a id="vote-down" class="vote-btn gray button" href="">Disagree</a></li>');
-      	 }
+
+        var id= result.data[i].TID;
+      	$('ul').append("<li id='"+id+"'>"+result.data[i].text+
+          '<a id="vote-up'+id+'" class="vote-btn gray button vote-up">Agree</a>'+
+          '<a id="vote-down'+id+'" class="vote-btn gray button vote-down">Disagree</a></li>');
+      	 
+
+        //console.log($('ul #'+result.data[i].TID+' #vote-up'));
+        $('#vote-up'+id).on('click', function(){
+          var trait_ID = this.parentNode.id;
+          console.log(trait_ID);
+          $.post('http://people.ischool.berkeley.edu/~ruidai/cgi-bin/proxy.py', 
+            {action: 'update_vote', TID: trait_ID, columnName: 'ups'},
+            function(data) {
+              //@Michael: update the vote count in UI
+              console.log('updated vote');
+
+            }); //end post
+          return false;
+
+
+        }); //click vote up
+       
+
+
+        $('#vote-down'+id).on('click', function(){
+          var trait_ID = this.parentNode.id;
+          console.log(trait_ID);
+          $.post('http://people.ischool.berkeley.edu/~ruidai/cgi-bin/proxy.py', 
+            {action: 'update_vote', TID: trait_ID, columnName: 'downs'},
+            function(data) {
+              //@Michael: update the vote count in UI
+              console.log('updated vote');
+
+            }); //end post
+          return false;
+
+
+        }); //click vote down
+      } //end for
+
+
     });
 
 }
@@ -55,5 +98,18 @@ function getSummedVotesByPerson (PID) {
 }
 
 
+function agreeClick() {
+  console.log(self);
+}
+
+$(document).ready(function() {
+
+  console.log('document ready');
+$("#vote-down").on('click', function() {
+
+  console.log("vote down click");
+});
+
+});
 getTraitsByPerson(0);
 
