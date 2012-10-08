@@ -5,6 +5,145 @@ TRAITS_VOTES='1mvttpDkpEw6kLGQqdr29hFtlUaD6WHf6FCfBiyo',
 API_KEY='AIzaSyB-RXon7sorCRGKIOg5JF4vTsTn2NTEb3U';
 
 
+var curr_PID= 0;  //stores the PID of the current user. 
+
+
+// log in script
+  $(document).on("ready",function(){
+
+    //set-up for initial page view
+    $('#welcome1').hide();
+    $('#welcome2').hide();
+    $('#access').hide();
+    $('.main-content').hide();
+
+    //formating for links on mouse hover
+    $('a').hover(
+      function(){$('a').css({'color': 'red'});},
+      function(){$('a').css({'color': 'black'});}
+      );
+
+    //gets window size for formating divs
+    $(function(){
+        $('#blur') .css({'height': (($(window).height()))});
+        $('#access, #get-account') .css({'height': (($(window).height())*.75)});
+    });
+    
+    //gets window size on resize for formating divs
+    $(window).resize(function(){
+       $('#blur') .css({'height': (($(window).height()))});
+       $('#access, #get-account') .css({'height': (($(window).height())*.75)});
+    });
+
+    //switches from sign-up page to sign-in
+    $('#goToSignIn').on('click', function(){
+      $('#get-account').hide();
+      $('#access').show();
+      $('#warning').html("");
+    });
+
+    //switches from sign-in page to sign-up
+    $('#goToSignUp').on('click', function(){
+      $('#access').hide();
+      $('#get-account').show();
+      $('#tryAgain').html("");
+    });
+
+    //Checks username against FT using python proxy
+    $('#sign-up').on('submit' ,function(){
+      
+      console.log('get-account form submitted');
+      
+      //var email_val = /^.+@\w+..+$/;
+      var userName = $('#userName').val();
+      userName = userName + "@ischool.berkeley.edu";
+
+      //if (email.search(email_val) !== -1) {
+
+        $.post('http://people.ischool.berkeley.edu/~ruidai/cgi-bin/proxy.py?callback=?', {action: 'get_token', email: userName}, function(data) {
+
+          data = trim(data);
+          checkEmail(data);
+
+        });
+      /*} else {
+
+        $('#warning').html('*Invalid email format, try again');
+        console.log('not a correct email');
+      }*/
+      
+      return false;
+    });
+
+    //Eliminates invisible characters 
+    function trim(stringToTrim) {
+          return stringToTrim.replace(/^\s+|\s+$/g,"");
+    }
+
+    //Evaluates states sent from Python proxy and modifies html of login elements accordingly
+    function checkEmail (proxyRes){
+
+      //console.log(proxyRes);
+
+      if (proxyRes === "NOT_FOUND"){
+        $('#warning').html('*Sorry, sign-up only available for UC Berkeley MIMS 2013 and 2014 students');
+
+      } else if (proxyRes == 'SOMETHING_WRONG'){
+        console.log('Error somewhere in proxy server processing');
+
+      } else if (proxyRes == 'GENERATED'){
+
+        $('#get-account').hide();
+        $('#welcome1, #access').show();
+
+      } else if (proxyRes == 'RESENT'){
+
+        $('#get-account').hide();
+        $('#welcome2, #access').show();
+
+      } else {
+
+        console.log('ooops...something is terribly wrong! debug time : (');
+
+      }
+
+    }
+
+    //Checks user name and token against fusion table using python proxy.  Grants access 
+    //or not based on value passed back.
+    $('#log-in').on('submit', function(){
+
+      console.log('log-in form submitted');
+
+      var email_complete = $('#user').val()+"@ischool.berkeley.edu";
+
+      $.post('http://people.ischool.berkeley.edu/~ruidai/cgi-bin/proxy.py?callback=?', {action: 'verify_token', email: email_complete, token: $('#token').val()},
+        function(data) {
+
+          data = trim(data);
+          if (data == "True"){
+
+            $('#login-container').fadeOut('slow');
+            $('#blur').fadeOut('slow');
+
+            $('.main-content').fadeIn('slow');
+            curr_PID=9;
+
+          } else{
+
+            $('#tryAgain').html('*Incorrect login information.  Please try again.');
+
+          }
+      });
+
+      return false;
+
+    });
+
+  }); //end document ready
+
+
+
 function getVotesAll() {
   var query = "SELECT TID, ups, downs FROM " + VOTES;
   ft2json.query(query, function(result) {
@@ -105,6 +244,9 @@ function getSummedVotesByPerson (PID) {
 $(document).on('ready', function() {
 
   console.log('document ready');
+  $('#go-to-me').on('click', function(){
+    console.log(curr_PID);
+  });
 
 
 });

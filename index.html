@@ -12,10 +12,68 @@
 </head>
 
 <body>
+
+
+
+
+
+<div id ="blur">
+</div>
+
+<div id ="login-container">
+  <div id="get-account">
+    <h2>Having doubts?<h2>
+    <h1>Sign up to Know Thy Self!</h1> 
+    <p></p>
+    <form id ="sign-up" method = "post">
+      <label>Enter your ischool user name: </label><input type='text' id = 'userName'/> 
+      <input type='submit' value ='Sign me up!'/><br>
+      <label class = "warning" id = 'warning'></label>
+    </form> 
+    <p>Already signed-up? <a id="goToSignIn"> Click here to sign in </a><p>
+
+  </div>
+
+  <div id="access">
+    <div id="welcome1">
+      <h1>Welcome!</h1>
+      <p>To get started, check your email for your personal token and enter it below along with your ischool email.</p>
+    </div>
+
+    <div id="welcome2">
+      <h1>Welcome back!</h1>
+      <p>Your token has been resent to your email.  Go grab it if you forgot or enter it below along with your ischool email.</p>
+    </div>
+
+    <h2>Sign in to Know Thy Self!</h2>
+    <form id = "log-in" method = "post">
+      <table>
+        <tr>
+          <td><label>User Name: </label></td>
+          <td><input type = 'text' id = 'user'/></td>
+        </tr>
+        <tr>
+          <td><label>Token: </label></td>
+          <td><input type = 'text' id = 'token'/></td>
+          <td><input type = 'submit' value = 'Sign in'/></td>
+        </tr>
+      </table>
+      <label class = "warning" id = 'tryAgain'></label> 
+    </form>
+    <p>Don't have a token? <a id ="goToSignUp">Click here to sign-up</a></p>
+  </div>
+</div>
+
+
+
+<div class="main-content">
   
   <div class="header">
     <h1>Know Thy Self</h1>
   </div>
+  <div id="go-to-me">
+  go to me
+</div>
 
   <div class="photo-wrapper">
     <div class="carousel" data-transition="slide">
@@ -32,6 +90,7 @@
 
 <div class="holder"></div>
   </div>
+</div>
 
 </body>
 
@@ -40,4 +99,5 @@
 
 <script src="js/main.js"></script>
 <script src="js/accessFT.js" type="text/javascript"></script>
+
 </html>

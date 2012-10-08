@@ -222,3 +222,60 @@ a.button {
 .trait-container li:hover .vote-btn {
     display: inline;
 }​
+
+
+/* derek's fiile*/
+
+
+.warning {
+  font-size: 12px;
+  color: red;
+}
+
+#blur {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: auto;
+    background: #000;
+    opacity: 0.7;
+    filter: alpha(opacity = 80); /* required for opacity to work in IE */
+}
+
+#get-account,
+#access{
+  position: relative;
+  display: table-cell;
+  vertical-align: middle;
+}
+
+#welcome1,
+#welcome2{
+  font-weight: lighter;
+  margin: 10%;
+}
+
+table{
+  margin: 0 auto;
+}
+#login-container
+  {
+  position: absolute;
+  z-index: 2;
+  background-color: white ;
+  text-align: center;
+  width: 75%;
+  margin-right: auto;
+  margin-left: auto;
+  left: 12%;
+  top: 12%;
+  bottom: 12%;
+  display: table;
+
+}
+
+a {
+  color: #222222;
+  cursor: hand;
+  cursor: pointer;  
+}
