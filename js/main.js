@@ -89,6 +89,13 @@
 				// clean up children
 				$( this ).find( "." + itemClass ).removeClass( [ outClass, inClass, reverseClass ].join( " " ) );
 				
+				// num == -1
+				// finding active
+				// prevs = current index
+				// activeNum is prevs + 1 or next
+				// nextNum is active +/- direction
+				// 
+
 				var $from = $( this ).find( "." + activeClass ),
 					prevs = $from.index(),
 					activeNum = ( prevs < 0 ? 0 : prevs ) + 1,
