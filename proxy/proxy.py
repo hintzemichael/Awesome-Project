@@ -95,9 +95,9 @@ def updateVote (ft_client, table, TID, columnName):
 		ups=0
 		downs=0
 		if columnName=='ups':
-			ups=value
+			ups=1
 		else:
-			downs=value
+			downs=1
 		query = "INSERT INTO %s (TID, ups, downs) VALUES (%s, %s, %s);" % (table, TID, ups, downs)
 		q=ft_client.query(query)
 	else:
@@ -110,6 +110,7 @@ def updateVote (ft_client, table, TID, columnName):
 
 '''
 verifies if a token is correct from the people table 
+reuturns -1 if the token is incorrect or the person is not found
 '''
 def verifyToken (ft_client, table, email, token):
 	query= "SELECT ROWID, PID, token FROM %s  AS t where email='%s';" % (table, email)
@@ -117,13 +118,14 @@ def verifyToken (ft_client, table, email, token):
 	d=makeDict(q)
 	if (len(d['PID'])==0) :
 		#no record found
-		return False
+		return -1
 	else:
 		actualToken=d['token'][0]
 		if (actualToken==token):
-			return True
+			return d['PID'][0]
+			#return True
 		else:
-			return False
+			return -1
 
 
 def updateToken (ft_client, table, rowid, token):
