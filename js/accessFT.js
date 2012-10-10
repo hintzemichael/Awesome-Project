@@ -11,6 +11,7 @@ var curr_PID= 0;  //stores the PID of the current user.
 // log in script
   $(document).on("ready",function(){
 
+     var proxy = "http://people.ischool.berkeley.edu/~ruidai/cgi-bin/proxy_old.py?callback=?";
     //set-up for initial page view
     $('#welcome1').hide();
     $('#welcome2').hide();
@@ -52,15 +53,12 @@ var curr_PID= 0;  //stores the PID of the current user.
     //Checks username against FT using python proxy
     $('#sign-up').on('submit' ,function(){
       
-      console.log('get-account form submitted');
-      
-      //var email_val = /^.+@\w+..+$/;
       var userName = $('#userName').val();
       userName = userName + "@ischool.berkeley.edu";
 
       //if (email.search(email_val) !== -1) {
 
-        $.post('http://people.ischool.berkeley.edu/~ruidai/cgi-bin/proxy.py?callback=?', {action: 'get_token', email: userName}, function(data) {
+        $.post(proxy, {action: 'get_token', email: userName}, function(data) {
 
           data = trim(data);
           checkEmail(data);
@@ -86,7 +84,7 @@ var curr_PID= 0;  //stores the PID of the current user.
       //console.log(proxyRes);
 
       if (proxyRes === "NOT_FOUND"){
-        $('#warning').html('*Sorry, sign-up only available for UC Berkeley MIMS 2013 and 2014 students');
+        $('#warning').html('Sorry, sign-up only available for UC Berkeley MIMS 2013 and 2014 students');
 
       } else if (proxyRes == 'SOMETHING_WRONG'){
         console.log('Error somewhere in proxy server processing');
@@ -117,7 +115,7 @@ var curr_PID= 0;  //stores the PID of the current user.
 
       var email_complete = $('#user').val()+"@ischool.berkeley.edu";
 
-      $.post('http://people.ischool.berkeley.edu/~ruidai/cgi-bin/proxy.py?callback=?', {action: 'verify_token', email: email_complete, token: $('#token').val()},
+      $.post(proxy, {action: 'verify_token', email: email_complete, token: $('#token').val()},
         function(data) {
 
           data = trim(data);
@@ -131,7 +129,7 @@ var curr_PID= 0;  //stores the PID of the current user.
 
           } else{
 
-            $('#tryAgain').html('*Incorrect login information.  Please try again.');
+            $('#tryAgain').html('Incorrect login information.  Please try again.');
 
           }
       });
