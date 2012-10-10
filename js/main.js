@@ -1,398 +1,152 @@
-/*
- * responsive-carousel ajax include extension
- * https://github.com/filamentgroup/responsive-carousel
- *
- * Copyright (c) 2012 Filament Group, Inc.
- * Licensed under the MIT, GPL licenses.
- */
-
- /* -------------------------------------------------- 
+/* -------------------------------------------------- 
    Table of Contents
 -----------------------------------------------------
 :: Carousel 
-:: AJAX
-:: Keyboard
-:: Touch
-:: Drag
 */
 
 /* -----------------------------------------
    Carousel Script
 ----------------------------------------- */
-(function($) {
-	
-	var pluginName = "carousel",
-		initSelector = "." + pluginName,
-		transitionAttr = "data-transition",
-		transitioningClass = pluginName + "-transitioning",
-		itemClass = pluginName + "-item",
-		activeClass = pluginName + "-active",
-		inClass = pluginName + "-in",
-		outClass = pluginName + "-out",
-		navClass =  pluginName + "-nav",
-		cssTransitionsSupport = (function(){
-			var prefixes = "webkit Moz O Ms".split( " " ),
-				supported = false,
-				property;
+/* Tiny Carousel 
+http://baijs.nl/tinycarousel/
+*/
 
-			while( prefixes.length ){
-				property = prefixes.shift() + "Transition";
-
-				if ( property in document.documentElement.style !== undefined && property in document.documentElement.style !== false ) {
-					supported = true;
-					break;
-				}
-			}
-			return supported;
-		}()),
-		methods = {
-			_create: function(){
-				$( this )
-					.trigger( "beforecreate." + pluginName )
-					[ pluginName ]( "_init" )
-					[ pluginName ]( "_addNextPrev" )
-					.trigger( "create." + pluginName );
-			},
-			
-			_init: function(){
-				var trans = $( this ).attr( transitionAttr );
-				
-				if( !trans ){
-					cssTransitionsSupport = false;
-				}
-				
-				return $( this )
-					.addClass(
-						pluginName + 
-						" " + ( trans ? pluginName + "-" + trans : "" ) + " "
-					)
-					.children()
-					.addClass( itemClass )
-					.first()
-					.addClass( activeClass );
-			},
-			
-			next: function(){
-				$( this )[ pluginName ]( "goTo", "+1" );
-			},
-			
-			prev: function(){
-				$( this )[ pluginName ]( "goTo", "-1" );
-			},
-			
-			goTo: function( num ){
-				
-				var $self = $(this),
-					trans = $self.attr( transitionAttr ),
-					reverseClass = " " + pluginName + "-" + trans + "-reverse";
-				
-				// clean up children
-				$( this ).find( "." + itemClass ).removeClass( [ outClass, inClass, reverseClass ].join( " " ) );
-				
-				// num == -1
-				// finding active
-				// prevs = current index
-				// activeNum is prevs + 1 or next
-				// nextNum is active +/- direction
-				// 
-
-				var $from = $( this ).find( "." + activeClass ),
-					prevs = $from.index(),
-					activeNum = ( prevs < 0 ? 0 : prevs ) + 1,
-					nextNum = typeof( num ) === "number" ? num : activeNum + parseFloat(num),
-					$to = $( this ).find( ".carousel-item" ).eq( nextNum - 1 ),
-					reverse = ( typeof( num ) === "string" && !(parseFloat(num)) ) || nextNum > activeNum ? "" : reverseClass;
-				
-				if( !$to.length ){
-					$to = $( this ).find( "." + itemClass )[ reverse.length ? "last" : "first" ]();
-				}
-
-				if( cssTransitionsSupport ){
-					$self[ pluginName ]( "_transitionStart", $from, $to, reverse );
-
-				} else {
-					$to.addClass( activeClass );
-					$self[ pluginName ]( "_transitionEnd", $from, $to, reverse );
-				}
-				
-				var to_id=$to[0].getAttribute('id');
-				console.log('to: '+to_id);
-				getTraitsByPerson(to_id);
-				// added to allow pagination to track
-				$self.trigger( "goto." + pluginName, $to );
-			},
-			
-			update: function(){
-				$(this).children().not( "." + navClass ).addClass( itemClass );
-				
-				return $(this).trigger( "update." + pluginName );
-			},
-			
-			_transitionStart: function( $from, $to, reverseClass ){
-				var $self = $(this);
-				
-				$to.one( navigator.userAgent.indexOf( "AppleWebKit" ) > -1 ? "webkitTransitionEnd" : "transitionend otransitionend", function(){
-					$self[ pluginName ]( "_transitionEnd", $from, $to, reverseClass );
-				});
-				
-				$(this).addClass( reverseClass );
-				$from.addClass( outClass );
-				$to.addClass( inClass );	
-			},
-			
-			_transitionEnd: function( $from, $to, reverseClass ){
-				$(this).removeClass( reverseClass );
-				$from.removeClass( outClass + " " + activeClass );
-				$to.removeClass( inClass ).addClass( activeClass );
-			},
-						
-			_bindEventListeners: function(){
-				var $elem = $( this )
-					.bind( "click", function( e ){
-						var targ = $( e.target ).closest( "a[href='#next'],a[href='#prev']" );
-						if( targ.length ){
-							$elem[ pluginName ]( targ.is( "[href='#next']" ) ? "next" : "prev" );
-							e.preventDefault();
-						}
-
-					});
-				
-				return this;
-			},
-			
-			_addNextPrev: function(){
-				return $( this )
-					.append( "<nav class='"+ navClass +"'><a href='#prev' class='prev' aria-hidden='true' title='Previous'>Prev</a><a href='#next' class='next' aria-hidden='true' title='Next'>Next</a></nav>" )
-					[ pluginName ]( "_bindEventListeners" );
-			},
-			
-			destroy: function(){
-				// TODO
-			}
-		};
-		
-	// Collection method.
-	$.fn[ pluginName ] = function( arrg, a, b, c ) {
-		return this.each(function() {
-
-			// if it's a method
-			if( arrg && typeof( arrg ) === "string" ){
-				return $.fn[ pluginName ].prototype[ arrg ].call( this, a, b, c );
-			}
-			
-			// don't re-init
-			if( $( this ).data( pluginName + "data" ) ){
-				return $( this );
-			}
-			
-			// otherwise, init
-			$( this ).data( pluginName + "active", true );
-			$.fn[ pluginName ].prototype._create.call( this );
-		});
-	};
-	
-	// add methods
-	$.extend( $.fn[ pluginName ].prototype, methods ); 
-	
-	// DOM-ready auto-init
-	$( function(){
-		$( initSelector )[ pluginName ]();
-	} );
-
+(function (a) {
+    a.tiny = a.tiny || {};
+    a.tiny.carousel = {
+        options: {
+            start: 1,
+            display: 1,
+            axis: "x",
+            controls: true,
+            pager: false,
+            interval: false,
+            intervaltime: 3000,
+            rewind: false,
+            animation: true,
+            duration: 1000,
+            callback: null
+        }
+    };
+    a.fn.tinycarousel_start = function () {
+        a(this).data("tcl").start()
+    };
+    a.fn.tinycarousel_stop = function () {
+        a(this).data("tcl").stop()
+    };
+    a.fn.tinycarousel_move = function (c) {
+        a(this).data("tcl").move(c - 1, true)
+    };
+ 
+    function b(q, e) {
+        var i = this,
+            h = a(".viewport:first", q),
+            g = a(".overview:first", q),
+            k = g.children(),
+            f = a(".next:first", q),
+            d = a(".prev:first", q),
+            l = a(".pager:first", q),
+            w = 0,
+            u = 0,
+            p = 0,
+            j = undefined,
+            o = false,
+            n = true,
+            s = e.axis === "x";
+ 
+        function m() {
+            if (e.controls) {
+                d.toggleClass("disable", p <= 0);
+                f.toggleClass("disable", !(p + 1 < u))
+            }
+            if (e.pager) {
+                var x = a(".pagenum", l);
+                x.removeClass("active");
+                a(x[p]).addClass("active")
+            }
+        }
+        function v(x) {
+            if (a(this).hasClass("pagenum")) {
+                i.move(parseInt(this.rel, 10), true)
+            }
+            return false
+        }
+        function t() {
+            if (e.interval && !o) {
+                clearTimeout(j);
+                j = setTimeout(function () {
+                    p = p + 1 === u ? -1 : p;
+                    n = p + 1 === u ? false : p === 0 ? true : n;
+                    i.move(n ? 1 : -1)
+                }, e.intervaltime)
+            }
+        }
+        function r() {
+            if (e.controls && d.length > 0 && f.length > 0) {
+                d.click(function () {
+                    i.move(-1);
+                    return false
+                });
+                f.click(function () {
+                    i.move(1);
+                    return false
+                })
+            }
+            if (e.interval) {
+                q.hover(i.stop, i.start)
+            }
+            if (e.pager && l.length > 0) {
+                a("a", l).click(v)
+            }
+        }
+        this.stop = function () {
+            clearTimeout(j);
+            o = true
+        };
+        this.start = function () {
+            o = false;
+            t()
+        };
+        this.move = function (y, z) {
+            p = z ? y : p += y;
+            if (p > -1 && p < u) {
+                var x = {};
+                x[s ? "left" : "top"] = -(p * (w * e.display));
+                g.animate(x, {
+                    queue: false,
+                    duration: e.animation ? e.duration : 0,
+                    complete: function () {
+                        if (typeof e.callback === "function") {
+                            e.callback.call(this, k[p], p)
+                        }
+                    }
+                });
+                m();
+                t()
+            }
+        };
+ 
+        function c() {
+            w = s ? a(k[0]).outerWidth(true) : a(k[0]).outerHeight(true);
+            var x = Math.ceil(((s ? h.outerWidth() : h.outerHeight()) / (w * e.display)) - 1);
+            u = Math.max(1, Math.ceil(k.length / e.display) - x);
+            p = Math.min(u, Math.max(1, e.start)) - 2;
+            g.css(s ? "width" : "height", (w * k.length));
+            i.move(1);
+            r();
+            return i
+        }
+        return c()
+    }
+    a.fn.tinycarousel = function (d) {
+        var c = a.extend({}, a.tiny.carousel.options, d);
+        this.each(function () {
+            a(this).data("tcl", new b(a(this), c))
+        });
+        return this
+    }
 }(jQuery));
-
-/* -----------------------------------------
-   AJAX Script
------------------------------------------ */
-(function($) {
-	
-	var pluginName = "carousel",
-		initSelector = "." + pluginName;
-	
-	// DOM-ready auto-init
-	$( initSelector ).live( "ajaxInclude", function(){
-		$( this )[ pluginName ]( "update" );
-	} );
-	
-	// kick off ajaxIncs at dom ready
-	$( function(){
-		$( "[data-after],[data-before]", initSelector ).ajaxInclude();
-	} );
-
-}(jQuery));
-
-/* -----------------------------------------
-   Keyboard Script
------------------------------------------ */
-(function($) {
-	var pluginName = "carousel",
-		initSelector = "." + pluginName,
-		navSelector = "." + pluginName + "-nav a",
-		buffer,
-		keyNav = function( e ) {
-			clearTimeout( buffer );
-			buffer = setTimeout(function() {
-				var $carousel = $( e.target ).closest( initSelector );
-				
-				if( e.keyCode === 39 || e.keyCode === 40 ){ 
-					$carousel[ pluginName ]( "next" );
-				}
-				else if( e.keyCode === 37 || e.keyCode === 38 ){
-					$carousel[ pluginName ]( "prev" );
-				}
-			}, 200 );
-
-			if( 37 <= e.keyCode <= 40 ) {
-				e.preventDefault();
-			}
-		};
-
-	// Touch handling
-	$( navSelector )
-		.live( "click", function( e ) {
-			$( e.target )[ 0 ].focus();
-		})
-		.live( "keydown", keyNav );
-}(jQuery));
-
-/* -----------------------------------------
-   Touch Script
------------------------------------------ */
-(function($) {
-	
-	var pluginName = "carousel",
-		initSelector = "." + pluginName,
-		noTrans = pluginName + "-no-transition",
-		// UA is needed to determine whether to return true or false during touchmove (only iOS handles true gracefully)
-		iOS = /iPhone|iPad|iPod/.test( navigator.platform ) && navigator.userAgent.indexOf( "AppleWebKit" ) > -1,
-		touchMethods = {
-			_dragBehavior: function(){
-				var $self = $( this ),
-					origin,
-					data = {},
-					xPerc,
-					yPerc,
-					setData = function( e ){
-						
-						var touches = e.touches || e.originalEvent.touches,
-							$elem = $( e.target ).closest( initSelector );
-						
-						if( e.type === "touchstart" ){
-							origin = { 
-								x : touches[ 0 ].pageX,
-								y: touches[ 0 ].pageY
-							};
-						}
-
-						if( touches[ 0 ] && touches[ 0 ].pageX ){
-							data.touches = touches;
-							data.deltaX = touches[ 0 ].pageX - origin.x;
-							data.deltaY = touches[ 0 ].pageY - origin.y;
-							data.w = $elem.width();
-							data.h = $elem.height();
-							data.xPercent = data.deltaX / data.w;
-							data.yPercent = data.deltaY / data.h;
-							data.srcEvent = e;
-						}
-
-					},
-					emitEvents = function( e ){
-						setData( e );
-						$( e.target ).closest( initSelector ).trigger( "drag" + e.type.split( "touch" )[ 1], data );
-					};
-
-				$( this )
-					.bind( "touchstart", function( e ){
-						$( this ).addClass( noTrans );
-						emitEvents( e );
-					} )
-					.bind( "touchmove", function( e ){
-						setData( e );
-						emitEvents( e );
-						if( !iOS ){
-							e.preventDefault();
-							window.scrollBy( 0, -data.deltaY );
-						}					
-					} )
-					.bind( "touchend", function( e ){
-						$( this ).removeClass( noTrans );
-						emitEvents( e );
-					} );
-					
-					
-			}
-		};
-			
-	// add methods
-	$.extend( $.fn[ pluginName ].prototype, touchMethods ); 
-	
-	// DOM-ready auto-init
-	$( initSelector ).live( "create." + pluginName, function(){
-		$( this )[ pluginName ]( "_dragBehavior" );
-	} );
-
-}(jQuery));
-
-/* -----------------------------------------
-   Drag Script
------------------------------------------ */
-(function($) {
-	
-	var pluginName = "carousel",
-		initSelector = "." + pluginName,
-		activeClass = pluginName + "-active",
-		itemClass = pluginName + "-item",
-		dragThreshold = function( deltaX ){
-			return Math.abs( deltaX ) > 4;
-		},
-		getActiveSlides = function( $carousel, deltaX ){
-			var $from = $carousel.find( "." + pluginName + "-active" ),
-				activeNum = $from.prevAll().length + 1,
-				forward = deltaX < 0,
-				nextNum = activeNum + (forward ? 1 : -1),
-				$to = $carousel.find( "." + itemClass ).eq( nextNum - 1 );
-				
-			if( !$to.length ){
-				$to = $carousel.find( "." + itemClass )[ forward ? "first" : "last" ]();
-			}
-			
-			return [ $from, $to ];
-		};
-		
-	// Touch handling
-	$( initSelector )
-		.live( "dragmove", function( e, data ){
-
-			if( !dragThreshold( data.deltaX ) ){
-				return;
-			}
-			var activeSlides = getActiveSlides( $( this ), data.deltaX );
-			
-			activeSlides[ 0 ].css( "left", data.deltaX + "px" );
-			activeSlides[ 1 ].css( "left", data.deltaX < 0 ? data.w + data.deltaX + "px" : -data.w + data.deltaX + "px" );
-		} )
-		.live( "dragend", function( e, data ){
-			if( !dragThreshold( data.deltaX ) ){
-				return;
-			}
-			var activeSlides = getActiveSlides( $( this ), data.deltaX ),
-				newSlide = Math.abs( data.deltaX ) > 45;
-			
-			$( this ).one( navigator.userAgent.indexOf( "AppleWebKit" ) ? "webkitTransitionEnd" : "transitionEnd", function(){
-				activeSlides[ 0 ].add( activeSlides[ 1 ] ).css( "left", "" );
-			});			
-				
-			if( newSlide ){
-				activeSlides[ 0 ].removeClass( activeClass ).css( "left", data.deltaX > 0 ? data.w  + "px" : -data.w  + "px" );
-				activeSlides[ 1 ].addClass( activeClass ).css( "left", 0 );
-			}
-			else {
-				activeSlides[ 0 ].css( "left", 0);
-				activeSlides[ 1 ].css( "left", data.deltaX > 0 ? -data.w  + "px" : data.w  + "px" );	
-			}
-		} );
-		
-}(jQuery));
+ 
 
 /* Script to generate people.html
   <script type="text/javascript">

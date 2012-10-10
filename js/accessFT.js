@@ -173,7 +173,7 @@ function getTraitsByPerson(PID) {
       for (var i=0; i<result.data.length; i++) {
 
         var id= result.data[i].TID;
-      	$('ul').append("<li id='"+id+"'>"+result.data[i].text+
+      	$('.trait-container ul').append("<li id='"+id+"'>"+result.data[i].text+
           '<a id="vote-up'+id+'" class="vote-btn gray button vote-up">Agree</a>'+
           '<a id="vote-down'+id+'" class="vote-btn gray button vote-down">Disagree</a></li>');
       	 
