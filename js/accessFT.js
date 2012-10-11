@@ -5,13 +5,14 @@ TRAITS_VOTES='1mvttpDkpEw6kLGQqdr29hFtlUaD6WHf6FCfBiyo',
 API_KEY='AIzaSyB-RXon7sorCRGKIOg5JF4vTsTn2NTEb3U';
 
 
-var curr_PID= 0;  //stores the PID of the current user. 
-
+var curr_PID= 0;  //stores the PID of the current profile.
+var user_PID= 0; // stores PID of the current user; 
+var proxy = "http://people.ischool.berkeley.edu/~ruidai/cgi-bin/proxy.py?callback=?";
 
 // log in script
   $(document).on("ready",function(){
 
-     var proxy = "http://people.ischool.berkeley.edu/~ruidai/cgi-bin/proxy_old.py?callback=?";
+     
     //set-up for initial page view
     $('#welcome1').hide();
     $('#welcome2').hide();
@@ -119,13 +120,18 @@ var curr_PID= 0;  //stores the PID of the current user.
         function(data) {
 
           data = trim(data);
-          if (data == "True"){
+          if (data != '-1'){
 
             $('#login-container').fadeOut('slow');
             $('#blur').fadeOut('slow');
 
             $('.main-content').fadeIn('slow');
-            curr_PID=9;
+            user_PID=data;
+            console.log ("current user PID = "+user_PID);
+
+            //move the carousel to curr_PID
+            // TODO
+            refresh_screen(); // updates the traits
 
           } else{
 
@@ -182,7 +188,7 @@ function getTraitsByPerson(PID) {
         $('#vote-up'+id).on('click', function(){
           var trait_ID = this.parentNode.id;
           console.log(trait_ID);
-          $.post('http://people.ischool.berkeley.edu/~ruidai/cgi-bin/proxy.py', 
+          $.post(proxy, 
             {action: 'update_vote', TID: trait_ID, columnName: 'ups'},
             function(data) {
               //@Michael: update the vote count in UI
@@ -199,7 +205,7 @@ function getTraitsByPerson(PID) {
         $('#vote-down'+id).on('click', function(){
           var trait_ID = this.parentNode.id;
           console.log(trait_ID);
-          $.post('http://people.ischool.berkeley.edu/~ruidai/cgi-bin/proxy.py', 
+          $.post(proxy, 
             {action: 'update_vote', TID: trait_ID, columnName: 'downs'},
             function(data) {
               //@Michael: update the vote count in UI
@@ -212,7 +218,12 @@ function getTraitsByPerson(PID) {
         }); //click vote down
       } //end for
 
-
+      //TODO
+  console.log ("PID= "+ PID + "user_PID="+user_PID);
+   if (PID==user_PID) { //only able to add a trait for yourself.
+     var trait_form = "Enter a new Trait <input type='text' class='new-trait-input'/> <input type='submit' value ='Add'/>";
+      $('#traits-ul').append("<li class='new-trait-li'>"+trait_form+'</li>');
+   }
     });
 
 }
@@ -249,14 +260,6 @@ $(document).on('ready', function() {
 
 });
 
-  // $('.carousel').load('people.html', function(){
-  //   console.log($('.carousel-item:first-child')[0]);
-  //   $('.carousel-item:first-child').show();
-
-
-  // });
-
-getTraitsByPerson(0);
 
 function refresh_screen(){
   getTraitsByPerson(curr_PID);

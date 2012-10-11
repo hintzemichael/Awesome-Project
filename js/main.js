@@ -111,7 +111,10 @@ http://baijs.nl/tinycarousel/
             p = z ? y : p += y;
             if (p > -1 && p < u) {
                 var x = {};
+
                 x[s ? "left" : "top"] = -(p * (w * e.display));
+                
+                console.log(x[s ? "left" : "top"]);
                 g.animate(x, {
                     queue: false,
                     duration: e.animation ? e.duration : 0,
@@ -124,10 +127,13 @@ http://baijs.nl/tinycarousel/
                 m();
 
                 //This is where the Carousel moved. 
-                
+                console.log('y=', y);
+                console.log('z: ');
+                console.log(z);
+                console.log('p=', p);
                 curr_PID=p+1;
                 
-                refresh_screen();
+                refresh_screen(); //refresh the traits
                 t()
             }
         };
