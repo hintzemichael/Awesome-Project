@@ -166,10 +166,10 @@ function getTraitsAll() {
 
 function getTraitsByPerson(PID) {
 
-  $('ul').empty();
+  $('#traits-ul').empty();
    var query = "SELECT PID, TID, text FROM " + TRAITS + " WHERE PID="+PID;
    ft2json.query(query, function(result) {
-   console.log(result);
+    console.log(result);
       for (var i=0; i<result.data.length; i++) {
 
         var id= result.data[i].TID;
@@ -255,5 +255,9 @@ $(document).on('ready', function() {
 
 
   // });
+
 getTraitsByPerson(0);
 
+function refresh_screen(){
+  getTraitsByPerson(curr_PID);
+}
