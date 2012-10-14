@@ -10,7 +10,7 @@
 /* -----------------------------------------
    General Styles
 ----------------------------------------- */
-body {background-image: url("hotdog.jpg");background-size: 100%;text-align:center;font-family: 'Helvetica Neue', Helvetica, sans-serif;text-align: center; margin: 0; color: #222222; font-size: 16px;}
+body {text-align:center;font-family: 'Helvetica Neue', Helvetica, sans-serif;text-align: center; margin: 0; color: #222222; font-size: 16px;}
 .clear {clear:both;}
 hr.soften {
   height: 1px;
@@ -32,8 +32,9 @@ a:hover {
 .header {
    background-color: #3B5998;
    width: 100%;
+   padding-bottom: 10px;
 }
-.header h1{
+.header h1 {
     line-height: 40px;
     font-size: 48px;
     font-weight: 100;
@@ -41,6 +42,19 @@ a:hover {
     text-shadow: 1px 1px black;
     padding: 35px 0 25px 0;
     margin: 0;
+}
+.header h2 {
+  line-height: 30px;
+    font-size: 24px;
+    font-weight: 100;
+    padding: 0;
+    margin: 0;
+}
+.header h2 a{
+  color: #ffffff;
+}
+.header h2 a:hover{
+  color: #cccccc;
 }
 .photo-wrapper {
   background-color: #101010;

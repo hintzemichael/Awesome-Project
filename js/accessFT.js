@@ -19,12 +19,6 @@ var proxy = "http://people.ischool.berkeley.edu/~ruidai/cgi-bin/proxy.py?callbac
     $('#access').hide();
     $('.main-content').hide();
 
-    //formating for links on mouse hover
-    $('a').hover(
-      function(){$('a').css({'color': 'red'});},
-      function(){$('a').css({'color': 'black'});}
-      );
-
     //gets window size for formating divs
     $(function(){
         $('#blur') .css({'height': (($(window).height()))});
