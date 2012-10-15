@@ -122,18 +122,13 @@ var proxy = "http://people.ischool.berkeley.edu/~ruidai/cgi-bin/proxy.py?callbac
             $('.main-content').fadeIn('slow');
             user_PID=data;
 
+            refresh_screen(); // updates the traits
+
             var slider = $('#slider'); //stores slider id
     
             //go to current PID (user)
             $('#go-to-me').click(function(){ 
             slider.tinycarousel_move(user_PID);
-            return false;
-            });
-            refresh_screen(); // updates the traits
-
-            // Logged in user can add new traits for other to vote on
-            $('#add-trait').click(function(){ 
-            addNewTrait(user_PID);
             return false;
             });
 
@@ -158,6 +153,7 @@ function getVotes(TID) {
   var query = "SELECT TID, ups, downs FROM " + VOTES + " WHERE TID="+TID;
   ft2json.query(query, function(result) {
     var data=result.data[0]; //only 1 result
+    console.log(data);
     $('#vote-down-count'+TID).empty().append(data.downs).fadeIn();
     $('#vote-up-count'+TID).empty().append(data.ups).fadeIn();
     });
@@ -199,8 +195,8 @@ function getTraitsByPerson(PID) {
           $.post(proxy, 
             {action: 'update_vote', TID: trait_ID, columnName: 'ups'},
             function(data) {
-              console.log('updated vote');
-              refresh_screen();
+              getVotes(trait_ID);
+              getSummedVotesByPerson (curr_PID);
             }); //end post
 
           
@@ -215,9 +211,8 @@ function getTraitsByPerson(PID) {
           $.post(proxy, 
             {action: 'update_vote', TID: trait_ID, columnName: 'downs'},
             function(data) {
-              console.log('updated vote');
-              refresh_screen();
-
+              getVotes(trait_ID);
+              getSummedVotesByPerson (curr_PID);
             }); //end post
 
           
@@ -227,15 +222,20 @@ function getTraitsByPerson(PID) {
 
       //this logic should be in the main function
      if (PID==user_PID) { //only able to add a trait for yourself.
-       var trait_form = "Enter a new Trait <input type='text' class='new-trait-input'/> <input id='add-trait' name='add-trait' type='submit' value ='Add'/>";
+       var trait_form = "Enter a new Trait <input id='new-trait-text' type='text' class='new-trait-input'/> <input id='add-trait' name='add-trait' type='submit' value ='Add'/>";
         $('#traits-ul').append("<li class='new-trait-li'>"+trait_form+'</li>');
+          // Logged in user can add new traits for other to vote on
+            $('#add-trait').click(function(){ 
+            addNewTrait(user_PID);
+            return false;
+            });
      }
     });
 
 }
 
 function addNewTrait(PID) {
-  var new_trait = $('#add-trait').val();
+  var new_trait = $('#new-trait-text').val();
   console.log(new_trait);
   $('#traits-ul').append("<li class='new-trait-li'>"+new_trait+'</li>');
   //@RUI: Insert new_trait to fusion table for user_PID
