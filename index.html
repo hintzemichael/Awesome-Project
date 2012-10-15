@@ -10,20 +10,16 @@
   <script src="http://ft2json.appspot.com/api/ft2json.js" type="text/javascript"></script>
 
   <script src="js/accessFT.js" type="text/javascript"></script>
-  <script src="js/main.js"></script>
+  <script src="js/slider.js"></script>
   
   <script type="text/javascript">
     $(document).ready(function(){
+
       var slider = $('#slider');
 
       //Set slider start position
       slider.tinycarousel({ start: 1 });  
 
-      //go to current PID (user)
-      $('#go-to-me').click(function(){ 
-      slider.tinycarousel_move(4);
-      return false;
-      });
     });
 </script> 
 </head>
@@ -84,6 +80,7 @@
    </div>
    <!--Person slider-->
    <div class="photo-wrapper">
+    <div id="PID-name">Example Name</div>
       <div id="slider">
          <a class="buttons prev" href="#">left</a>
          <div class="viewport">
@@ -207,6 +204,7 @@
          </div>
          <a class="buttons next" href="#">right</a>
       </div>
+      <div id="summed-votes-container"><span id="summed-votes">5 </span>votes</div>
    </div>
    <div class="trait-container">
       <ul id="traits-ul">

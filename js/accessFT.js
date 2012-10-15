@@ -121,11 +121,21 @@ var proxy = "http://people.ischool.berkeley.edu/~ruidai/cgi-bin/proxy.py?callbac
 
             $('.main-content').fadeIn('slow');
             user_PID=data;
-            console.log ("current user PID = "+user_PID);
 
-            //move the carousel to curr_PID
-            // TODO
+            var slider = $('#slider'); //stores slider id
+    
+            //go to current PID (user)
+            $('#go-to-me').click(function(){ 
+            slider.tinycarousel_move(user_PID);
+            return false;
+            });
             refresh_screen(); // updates the traits
+
+            // Logged in user can add new traits for other to vote on
+            $('#add-trait').submit(function(){ 
+            addNewTrait(user_PID);
+            return false;
+            });
 
           } else{
 
@@ -162,20 +172,29 @@ function getTraitsAll() {
     });
 }
 
-
-
 function getTraitsByPerson(PID) {
 
   $('#traits-ul').empty();
    var query = "SELECT PID, TID, text FROM " + TRAITS + " WHERE PID="+PID;
    ft2json.query(query, function(result) {
-    console.log(result);
+
+
+      //@RUI I am having issue with what variable to pass to those functions for the PID, lets talk
+
+      //update name
+      //$('#PID-name').empty().append(getUserName(curr_PID)).fadeIn();
+
+      //update total trait count 
+      //$('#summed-votes').empty().append(getSummedVotesByPerson(curr_PID)).fadeIn();
+
       for (var i=0; i<result.data.length; i++) {
 
         var id= result.data[i].TID;
       	$('.trait-container ul').append("<li id='"+id+"'>"+result.data[i].text+
-          '<a id="vote-up'+id+'" class="vote-btn gray button vote-up">Agree</a>'+
-          '<a id="vote-down'+id+'" class="vote-btn gray button vote-down">Disagree</a></li>');
+
+          //@RUI: replace with getVotes(trait_id), with proper trait id
+          '<a id="vote-up'+id+'" class="vote-btn gray button vote-up">Agree <span id=vote-up-count'+id+'>'+'0'+'</span></a>'+
+          '<a id="vote-down'+id+'" class="vote-btn gray button vote-down">Disagree <span id=vote-down-count'+id+'>'+'0'+'</span></a></li>');
       	 
 
         //console.log($('ul #'+result.data[i].TID+' #vote-up'));
@@ -185,13 +204,12 @@ function getTraitsByPerson(PID) {
           $.post(proxy, 
             {action: 'update_vote', TID: trait_ID, columnName: 'ups'},
             function(data) {
-              //@Michael: update the vote count in UI
-              console.log('updated vote');
-
             }); //end post
+
+          //@RUI: replace with getVotes(trait_id), with proper trait id
+          $('#vote-up-count'+id).empty().append('5').fadeIn();
+
           return false;
-
-
         }); //click vote up
        
 
@@ -202,25 +220,35 @@ function getTraitsByPerson(PID) {
           $.post(proxy, 
             {action: 'update_vote', TID: trait_ID, columnName: 'downs'},
             function(data) {
-              //@Michael: update the vote count in UI
-              console.log('updated vote');
 
             }); //end post
+
+          //@RUI: replace with getVotes(trait_id), with proper trait id
+          $('#vote-down-count'+id).empty().append('4').fadeIn();
+
           return false;
-
-
         }); //click vote down
       } //end for
 
       //TODO
   console.log ("PID= "+ PID + "user_PID="+user_PID);
    if (PID==user_PID) { //only able to add a trait for yourself.
-     var trait_form = "Enter a new Trait <input type='text' class='new-trait-input'/> <input type='submit' value ='Add'/>";
+     var trait_form = "Enter a new Trait <input type='text' class='new-trait-input'/> <input id='add-trait' name='add-trait' type='submit' value ='Add'/>";
       $('#traits-ul').append("<li class='new-trait-li'>"+trait_form+'</li>');
    }
     });
 
 }
+
+function addNewTrait(PID) {
+  var new_trait = $('#add-trait').val();
+  //@RUI: Insert new_trait to fusion table for user_PID
+}
+
+function getUserName(PID) {
+  //@RUI: Query table for username, return first and last name
+}
+
 function getTraitsByTID(TID) {
    var query = "SELECT PID, TID, text FROM " + TRAITS + " WHERE TID="+TID;
    ft2json.query(query, function(result) {
@@ -240,20 +268,6 @@ function getSummedVotesByPerson (PID) {
       console.log(result.data[0]); //only 1 result 
     });
 }
-
-
-
-
-$(document).on('ready', function() {
-
-  console.log('document ready');
-  $('#go-to-me').on('click', function(){
-    console.log(curr_PID);
-  });
-
-
-});
-
 
 function refresh_screen(){
   getTraitsByPerson(curr_PID);
