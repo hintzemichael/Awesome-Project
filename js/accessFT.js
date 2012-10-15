@@ -152,16 +152,15 @@ var proxy = "http://people.ischool.berkeley.edu/~ruidai/cgi-bin/proxy.py?callbac
 
 
 
-function getVotesAll() {
-  var query = "SELECT TID, ups, downs FROM " + VOTES;
-  ft2json.query(query, function(result) {
-    console.log(result.data);
-    });
-}
+
+//retrieves ups and downs for a given trait and updates the respective vote counts in the view
 function getVotes(TID) {
   var query = "SELECT TID, ups, downs FROM " + VOTES + " WHERE TID="+TID;
   ft2json.query(query, function(result) {
-    console.log(result.data[0]); //only 1 result
+    var data=result.data[0]; //only 1 result
+    $('#vote-down-count'+TID).html(data.downs)
+    $('#vote-up-count'+TID).html(data.ups)
+
     });
 }
 
@@ -178,17 +177,8 @@ function getTraitsByPerson(PID) {
    var query = "SELECT PID, TID, text FROM " + TRAITS + " WHERE PID="+PID;
    ft2json.query(query, function(result) {
 
-
-      //@RUI I am having issue with what variable to pass to those functions for the PID, lets talk
-
-      //update name
-      //$('#PID-name').empty().append(getUserName(curr_PID)).fadeIn();
-
-      //update total trait count 
-      //$('#summed-votes').empty().append(getSummedVotesByPerson(curr_PID)).fadeIn();
-
       for (var i=0; i<result.data.length; i++) {
-
+        //trait id
         var id= result.data[i].TID;
       	$('.trait-container ul').append("<li id='"+id+"'>"+result.data[i].text+
 
@@ -206,12 +196,13 @@ function getTraitsByPerson(PID) {
             function(data) {
             }); //end post
 
-          //@RUI: replace with getVotes(trait_id), with proper trait id
-          $('#vote-up-count'+id).empty().append('5').fadeIn();
+          
 
           return false;
         }); //click vote up
        
+        getVotes(id);
+        
 
 
         $('#vote-down'+id).on('click', function(){
@@ -223,19 +214,16 @@ function getTraitsByPerson(PID) {
 
             }); //end post
 
-          //@RUI: replace with getVotes(trait_id), with proper trait id
-          $('#vote-down-count'+id).empty().append('4').fadeIn();
+          
 
           return false;
         }); //click vote down
       } //end for
 
-      //TODO
-  console.log ("PID= "+ PID + "user_PID="+user_PID);
-   if (PID==user_PID) { //only able to add a trait for yourself.
-     var trait_form = "Enter a new Trait <input type='text' class='new-trait-input'/> <input id='add-trait' name='add-trait' type='submit' value ='Add'/>";
-      $('#traits-ul').append("<li class='new-trait-li'>"+trait_form+'</li>');
-   }
+     if (PID==user_PID) { //only able to add a trait for yourself.
+       var trait_form = "Enter a new Trait <input type='text' class='new-trait-input'/> <input id='add-trait' name='add-trait' type='submit' value ='Add'/>";
+        $('#traits-ul').append("<li class='new-trait-li'>"+trait_form+'</li>');
+     }
     });
 
 }
@@ -245,8 +233,19 @@ function addNewTrait(PID) {
   //@RUI: Insert new_trait to fusion table for user_PID
 }
 
+
+//gets the user's name and updates the UI
 function getUserName(PID) {
-  //@RUI: Query table for username, return first and last name
+  var query = "SELECT name FROM " + PEOPLE + " WHERE PID='"+PID+"'";
+
+   ft2json.query(query, function(result) {
+      if (result.data==null) {
+        $('#PID-name').empty().append("").fadeIn();
+      } else {
+        $('#PID-name').empty().append(result.data[0].name).fadeIn();
+      }
+    });
+
 }
 
 function getTraitsByTID(TID) {
@@ -265,10 +264,24 @@ function getTraitsAndVotesByPerson(PID) {
 function getSummedVotesByPerson (PID) {
   var query = "SELECT sum(ups) as sumups, sum(downs) as sumdowns FROM " + TRAITS_VOTES + " WHERE PID="+PID;
    ft2json.query(query, function(result) {
-      console.log(result.data[0]); //only 1 result 
+      var data=result.data[0]; //only 1 result 
+      if (data ==null) {
+        $('#summed-votes-container').empty().append("0").fadeIn();
+      } else {
+        console.log(data);
+        var sum = parseInt(data.sumups)+parseInt(data.sumdowns);
+        $('#summed-votes-container').empty().append(sum).fadeIn();
+      }
+      
     });
 }
 
 function refresh_screen(){
   getTraitsByPerson(curr_PID);
+
+  getUserName(curr_PID);
+
+  //update total trait count 
+  //
+  getSummedVotesByPerson (curr_PID);
 }
