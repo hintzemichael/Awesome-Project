@@ -239,6 +239,8 @@ function addNewTrait(PID) {
   console.log(new_trait);
   $('#traits-ul').append("<li class='new-trait-li'>"+new_trait+'</li>');
   //@RUI: Insert new_trait to fusion table for user_PID
+
+  $.post(proxy, {action: 'add_trait', PID: PID, trait: new_trait});
 }
 
 
