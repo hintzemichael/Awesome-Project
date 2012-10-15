@@ -132,7 +132,7 @@ var proxy = "http://people.ischool.berkeley.edu/~ruidai/cgi-bin/proxy.py?callbac
             refresh_screen(); // updates the traits
 
             // Logged in user can add new traits for other to vote on
-            $('#add-trait').submit(function(){ 
+            $('#add-trait').click(function(){ 
             addNewTrait(user_PID);
             return false;
             });
@@ -160,7 +160,6 @@ function getVotes(TID) {
     var data=result.data[0]; //only 1 result
     $('#vote-down-count'+TID).empty().append(data.downs).fadeIn();
     $('#vote-up-count'+TID).empty().append(data.ups).fadeIn();
-
     });
 }
 
@@ -171,6 +170,10 @@ function getTraitsAll() {
     });
 }
 
+//Get traits function (fetch all traits for PID)
+
+//Vote up funtion for a given TID
+//Vote down function for a given TID
 function getTraitsByPerson(PID) {
 
   $('#traits-ul').empty();
@@ -204,8 +207,7 @@ function getTraitsByPerson(PID) {
 
           return false;
         }); //click vote up
-       
-        
+             
 
         $('#vote-down'+id).on('click', function(){
           var trait_ID = this.parentNode.id;
@@ -219,11 +221,11 @@ function getTraitsByPerson(PID) {
             }); //end post
 
           
-
           return false;
         }); //click vote down
       } //end for
 
+      //this logic should be in the main function
      if (PID==user_PID) { //only able to add a trait for yourself.
        var trait_form = "Enter a new Trait <input type='text' class='new-trait-input'/> <input id='add-trait' name='add-trait' type='submit' value ='Add'/>";
         $('#traits-ul').append("<li class='new-trait-li'>"+trait_form+'</li>');
@@ -234,6 +236,8 @@ function getTraitsByPerson(PID) {
 
 function addNewTrait(PID) {
   var new_trait = $('#add-trait').val();
+  console.log(new_trait);
+  $('#traits-ul').append("<li class='new-trait-li'>"+new_trait+'</li>');
   //@RUI: Insert new_trait to fusion table for user_PID
 }
 
@@ -270,16 +274,17 @@ function getSummedVotesByPerson (PID) {
    ft2json.query(query, function(result) {
       var data=result.data[0]; //only 1 result 
       if (data ==null) {
-        $('#summed-votes-container').empty().append("0").fadeIn();
+        $('#summed-votes').empty().append("0").fadeIn();
       } else {
         console.log(data);
         var sum = parseInt(data.sumups)+parseInt(data.sumdowns);
-        $('#summed-votes-container').empty().append(sum).fadeIn();
+        $('#summed-votes').empty().append(sum).fadeIn();
       }
       
     });
 }
 
+//update current screen - 1) get name, 2) Get Traits, 3) get votes for up and down, 4) get summed vote count 
 function refresh_screen(){
   getTraitsByPerson(curr_PID);
 
