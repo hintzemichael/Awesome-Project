@@ -158,8 +158,8 @@ function getVotes(TID) {
   var query = "SELECT TID, ups, downs FROM " + VOTES + " WHERE TID="+TID;
   ft2json.query(query, function(result) {
     var data=result.data[0]; //only 1 result
-    $('#vote-down-count'+TID).html(data.downs)
-    $('#vote-up-count'+TID).html(data.ups)
+    $('#vote-down-count'+TID).empty().append(data.downs).fadeIn();
+    $('#vote-up-count'+TID).empty().append(data.ups).fadeIn();
 
     });
 }
@@ -185,7 +185,9 @@ function getTraitsByPerson(PID) {
           //@RUI: replace with getVotes(trait_id), with proper trait id
           '<a id="vote-up'+id+'" class="vote-btn gray button vote-up">Agree <span id=vote-up-count'+id+'>'+'0'+'</span></a>'+
           '<a id="vote-down'+id+'" class="vote-btn gray button vote-down">Disagree <span id=vote-down-count'+id+'>'+'0'+'</span></a></li>');
-      	 
+      	
+        getVotes(id);
+    
 
         //console.log($('ul #'+result.data[i].TID+' #vote-up'));
         $('#vote-up'+id).on('click', function(){
@@ -194,6 +196,8 @@ function getTraitsByPerson(PID) {
           $.post(proxy, 
             {action: 'update_vote', TID: trait_ID, columnName: 'ups'},
             function(data) {
+              console.log('updated vote');
+              refresh_screen();
             }); //end post
 
           
@@ -201,9 +205,7 @@ function getTraitsByPerson(PID) {
           return false;
         }); //click vote up
        
-        getVotes(id);
         
-
 
         $('#vote-down'+id).on('click', function(){
           var trait_ID = this.parentNode.id;
@@ -211,6 +213,8 @@ function getTraitsByPerson(PID) {
           $.post(proxy, 
             {action: 'update_vote', TID: trait_ID, columnName: 'downs'},
             function(data) {
+              console.log('updated vote');
+              refresh_screen();
 
             }); //end post
 
