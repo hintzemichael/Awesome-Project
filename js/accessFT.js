@@ -153,9 +153,14 @@ function getVotes(TID) {
   var query = "SELECT TID, ups, downs FROM " + VOTES + " WHERE TID="+TID;
   ft2json.query(query, function(result) {
     var data=result.data[0]; //only 1 result
-    console.log(data);
-    $('#vote-down-count'+TID).empty().append(data.downs).fadeIn();
-    $('#vote-up-count'+TID).empty().append(data.ups).fadeIn();
+    //console.log(data);
+    if (data!=null) {
+      $('#vote-down-count'+TID).empty().append(data.downs).fadeIn();
+      $('#vote-up-count'+TID).empty().append(data.ups).fadeIn();
+    } else {
+      $('#vote-down-count'+TID).empty().append("0").fadeIn();
+      $('#vote-up-count'+TID).empty().append("0").fadeIn();      
+    }
     });
 }
 
@@ -223,7 +228,7 @@ function getTraitsByPerson(PID) {
       //this logic should be in the main function
      if (PID==user_PID) { //only able to add a trait for yourself.
        var trait_form = "Enter a new Trait <input id='new-trait-text' type='text' class='new-trait-input'/> <input id='add-trait' name='add-trait' type='submit' value ='Add'/>";
-        $('#traits-ul').append("<li class='new-trait-li'>"+trait_form+'</li>');
+        $('#traits-ul').prepend("<li class='new-trait-li'>"+trait_form+'</li>');
           // Logged in user can add new traits for other to vote on
             $('#add-trait').click(function(){ 
             addNewTrait(user_PID);
