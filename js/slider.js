@@ -62,7 +62,7 @@ http://baijs.nl/tinycarousel/
             if (e.pager) {
                 var x = a(".pagenum", l);
                 x.removeClass("active");
-                a(x[p]).addClass("active")
+                a(x[p]).addClass("active");
             }
         }
         function v(x) {
@@ -97,6 +97,7 @@ http://baijs.nl/tinycarousel/
             }
             if (e.pager && l.length > 0) {
                 a("a", l).click(v)
+
             }
         }
         this.stop = function () {

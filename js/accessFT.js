@@ -12,7 +12,7 @@ var proxy = "http://people.ischool.berkeley.edu/~ruidai/cgi-bin/proxy.py?callbac
 // log in script
   $(document).on("ready",function(){
 
-     
+ 
     //set-up for initial page view
     $('#welcome1').hide();
     $('#welcome2').hide();
@@ -126,6 +126,7 @@ var proxy = "http://people.ischool.berkeley.edu/~ruidai/cgi-bin/proxy.py?callbac
 
             var slider = $('#slider'); //stores slider id
     
+            //slider.tinycarousel({pager: true});
             //go to current PID (user)
             $('#go-to-me').click(function(){ 
             slider.tinycarousel_move(user_PID);
@@ -141,6 +142,16 @@ var proxy = "http://people.ischool.berkeley.edu/~ruidai/cgi-bin/proxy.py?callbac
 
       return false;
 
+    });
+
+    $('a.pagenum').click(function(){
+
+      $('.pagenum').removeClass('active');
+      var page = $(this).attr('rel');
+      $('#slider').tinycarousel_move(page);
+      $(this).addClass('active');
+      console.log($(this).attr('rel'));
+      return false;
     });
 
   }); //end document ready
@@ -290,6 +301,8 @@ function getSummedVotesByPerson (PID) {
       
     });
 }
+
+
 
 //update current screen - 1) get name, 2) Get Traits, 3) get votes for up and down, 4) get summed vote count 
 function refresh_screen(){
