@@ -98,11 +98,16 @@ http://baijs.nl/tinycarousel/
 #slider .overview li{ float: left; padding: 1px; height: 450px; border: none; width: 450px;}
 .carousel-item img {height: 450px; margin: 0 auto; width: auto; display: block;}
 
-#slider .pager { overflow:hidden; list-style: none; clear: both; margin: 0 0 0 45px; }
-#slider .pager ul {list-style: none}
-#slider .pager li { float: left; margin: 0, 0.15em;}
-#slider .pagenum { background-color: #000; text-decoration: none; text-align: center; padding: 5px; color: #555555; font-size: 14px; font-weight: bold; display: block; }
-#slider .active { color: #fff; background-color:  #555555; }
+#pager-wrap {
+  float: left;
+  margin: auto;
+}
+
+.pager { overflow:hidden; list-style: none; clear: both; margin: 0 0 0 45px; }
+.pager {list-style-type: none; float: left; margin: 0px; padding: 0px; }
+.pager li { float: left; margin: 0, 0.15em; padding: 0;}
+.pagenum { background-color: #000; text-decoration: none; text-align: center; padding: 5px; color: #555555; font-size: 14px; font-weight: bold; display: block; }
+.active { color: #fff; background-color:  #555555; }
 
 /* -----------------------------------------
    Trait Styles
@@ -192,12 +197,15 @@ table{
 }
 #login-container
   {
-  position: relative;
+
+  position: absolute;
+  top: 50px;
   z-index: 2;
   text-align: center;
   width: 960px;
   margin: 100px auto;
 }
+
 
 /************************************************************************************
 MEDIA QUERIES
