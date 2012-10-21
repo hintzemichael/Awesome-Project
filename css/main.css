@@ -10,7 +10,10 @@
 /* -----------------------------------------
    General Styles
 ----------------------------------------- */
-body {text-align:center;font-family: 'Helvetica Neue', Helvetica, sans-serif;text-align: center; margin: 0; color: #222222; font-size: 16px;}
+html {
+  background: url(../assets/main-bg.png); 
+}
+body {text-align:center;font-family: 'Helvetica Neue', Helvetica, sans-serif;text-align: center; margin: 0; color: #333333; font-size: 16px;}
 .clear {clear:both;}
 hr.soften {
   height: 1px;
@@ -22,57 +25,55 @@ hr.soften {
   border: 0;
 }
 a {
-  color: #666;
+  color: #0291d9;
   text-decoration: none;
   cursor: pointer;  
 }
 a:hover {
-  color: #0CC6E7;
+  color: #017ebd;
 }
 .header {
-   background-color: #3B5998;
    width: 100%;
    padding-bottom: 10px;
 }
 .header h1 {
     line-height: 40px;
     font-size: 48px;
-    font-weight: 100;
-    color: #ffffff;
-    text-shadow: 1px 1px black;
+    font-weight: 400;
     padding: 35px 0 25px 0;
     margin: 0;
+    opacity: .25;
+    text-shadow: 5px 5px 0px #EEE, 6px 6px 0px #707070;
 }
 .header h2 {
   line-height: 30px;
-    font-size: 24px;
-    font-weight: 100;
-    padding: 0;
-    margin: 0;
+  font-size: 20px;
+  font-weight: 100;
+  padding: 0;
+  margin: 0;
 }
 .header h2 a{
-  color: #ffffff;
+  color: #aaaaaa;
 }
 .header h2 a:hover{
   color: #cccccc;
 }
 .photo-wrapper {
-  background-color: #101010;
+  background: rgba(16, 16, 16, 0.2);
   width: 100%;
   height: auto;
-  position: relative;
   padding: 45px 0 45px 0;
-   -moz-box-shadow:    inset 0 0 2px #111111;
-   -webkit-box-shadow: inset 0 0 2px #111111;
-   box-shadow:         inset 0 0 2px #111111;
+   -moz-box-shadow:    inset 0 0 2px #999999;
+   -webkit-box-shadow: inset 0 0 2px #999999;
+   box-shadow:         inset 0 0 2px #999999;
 }
 #PID-name {
   color: #ffffff;
   font-size: 22px;
-  font-weight: 300;
+  font-weight: 200;
 }
 #summed-votes-container {
-  background-color: #ffffff;
+  background-color: #eeeeee;
   opacity: .9;
   padding: 15px;
   width: 80px;
@@ -89,20 +90,23 @@ a:hover {
 /* Tiny Carousel 
 http://baijs.nl/tinycarousel/
 */
-#slider { height: 1%; overflow:hidden; padding: 0 0 10px; margin: 10px auto; position: relative; width: 548px;}
+#slider { height: 1%; overflow:hidden; padding: 0 0 10px; margin: 10px auto; position: relative; width: 550px;}
 #slider .viewport { float: left; width: 450px; height: 450px; overflow: hidden; position: relative; }
 #slider .buttons { background:url("../assets/buttons.png") no-repeat scroll 0 0 transparent; display: block; margin: 225px 10px 0 0; background-position: 0 -38px; text-indent: -999em; float: left; width: 39px; height: 37px; overflow: hidden; position: relative; }
 #slider .next { background-position: 0 0; margin: 225px 0 0 10px;  }
 #slider .disable { visibility: hidden; }
 #slider .overview { list-style: none; position: absolute; padding: 0; margin: 0; width: 100%; left: 0 top: 0; }
 #slider .overview li{ float: left; padding: 1px; height: 450px; border: none; width: 450px;}
-.carousel-item img {height: 450px; margin: 0 auto; width: auto; display: block;}
+.carousel-item img {height: 447px; margin: 0 auto; width: auto; display: block; border-radius: 6px; border:1px solid #777;}
 
-#slider .pager { overflow:hidden; list-style: none; clear: both; margin: 0 0 0 45px; }
-#slider .pager ul {list-style: none}
-#slider .pager li { float: left; margin: 0, 0.15em;}
-#slider .pagenum { background-color: #000; text-decoration: none; text-align: center; padding: 5px; color: #555555; font-size: 14px; font-weight: bold; display: block; }
-#slider .active { color: #fff; background-color:  #555555; }
+.navigation {
+  margin: 0 auto;
+}
+.pager {list-style: none; display: inline-block; padding: 0;}
+.pager ul {list-style: none}
+.pager li { float: left; margin: 0, 0.15em;}
+.pagenum { background-color: #aaaaaa; opacity: .5; text-decoration: none; text-align: center; padding: 5px; color: #555555; font-size: 14px; font-weight: bold; display: block; }
+.active { color: #fff; background-color:  #555555; }
 
 /* -----------------------------------------
    Trait Styles
@@ -156,48 +160,92 @@ a.button {
 .trait-container li:hover .vote-btn {
     display: inline;
 }​
-
-
-/* derek's fiile*/
-
-
-.warning {
-  font-size: 11px;
-  color: red;
-}
-
 #get-account h1{
   font-size: 80px;
   margin: 0;
+  color: #000000;
+  opacity: .25;
+  text-shadow: 5px 5px 0px #EEE, 6px 6px 0px #707070;
 }
 #get-account h2{
-  font-size: 38px;
+  font-size: 34px;
   font-weight: 100;
-  margin-top: 15px;
+  margin-top: 20px;
+  color: #666666;
 }
 #get-account h3{
   font-size: 24px;
   font-weight: 500;
-  margin-top: 60px;
+  margin-top: 50px;
 }
-
+#get-account p {
+  font-size: 14px;
+  margin-top: 20px;
+}
+#access p {
+  font-size: 14px;
+  margin-top: 20px;
+}
 #welcome1,
 #welcome2{
   font-weight: 100;
   margin: 10%;
+  font-size: 24px;
 }
 
 table{
   margin: 0 auto;
 }
 #login-container
-  {
-  position: relative;
+  { 
   z-index: 2;
   text-align: center;
   width: 960px;
   margin: 100px auto;
 }
+input[type=text] {
+    color: #1a3d51;  
+    background-color: #efefef;  
+    border-radius:2px;  
+    padding: 10px 10px 15px 10px;  
+    width: 250px;  
+    border: 0;  
+    font-size: 16px;  
+    text-shadow: rgba(255, 255, 255, 0.7) 1px 1px 1px;  
+    box-shadow: inset rgba(0,0,0,.2) 0 1px 1px;  
+}
+input[type=submit] {
+    margin-top: .2em;  
+    color: #ffffff;
+    z-index: 2;  
+    position: relative;  
+    vertical-align: top;   
+    border-radius: 3px;  
+    border: 1px solid #aaaaaa;  
+    box-shadow: inset rgba(255, 255, 255, .5) 0 0.1em 0.1em;  
+    cursor: pointer;  
+    height: 43px;  
+    min-width: 55px;  
+}
+input[type=submit]:active {  
+  box-shadow: inset rgba(0,0,0,.1) 0 1px 1px;  
+}      
+#sign-up input[type=submit] {   
+    height: 43px;  
+    min-width: 50px;  
+}  
+#log-in input[type=submit] {
+  font-size: 16px;
+  height: 43px;  
+  min-width: 270px; 
+}
+.warning {
+  margin-top: 15px;
+  margin-bottom: 15px;
+  display: block;
+  color: #DA4F49;
+}
+
 
 /************************************************************************************
 MEDIA QUERIES
