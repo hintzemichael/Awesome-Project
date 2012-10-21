@@ -99,6 +99,7 @@ http://baijs.nl/tinycarousel/
 #slider .overview li{ float: left; padding: 1px; height: 450px; border: none; width: 450px;}
 .carousel-item img {height: 447px; margin: 0 auto; width: auto; display: block; border-radius: 6px; border:1px solid #777;}
 
+<<<<<<< HEAD
 .navigation {
   margin: 0 auto;
 }
@@ -106,6 +107,17 @@ http://baijs.nl/tinycarousel/
 .pager ul {list-style: none}
 .pager li { float: left; margin: 0, 0.15em;}
 .pagenum { background-color: #aaaaaa; opacity: .5; text-decoration: none; text-align: center; padding: 5px; color: #555555; font-size: 14px; font-weight: bold; display: block; }
+=======
+#pager-wrap {
+  float: left;
+  margin: auto;
+}
+
+.pager { overflow:hidden; list-style: none; clear: both; margin: 0 0 0 45px; }
+.pager {list-style-type: none; float: left; margin: 0px; padding: 0px; }
+.pager li { float: left; margin: 0, 0.15em; padding: 0;}
+.pagenum { background-color: #000; text-decoration: none; text-align: center; padding: 5px; color: #555555; font-size: 14px; font-weight: bold; display: block; }
+>>>>>>> c5970018c07259f54875c5824d1834635ff22554
 .active { color: #fff; background-color:  #555555; }
 
 /* -----------------------------------------
@@ -197,7 +209,14 @@ table{
   margin: 0 auto;
 }
 #login-container
+<<<<<<< HEAD
   { 
+=======
+  {
+
+  position: absolute;
+  top: 50px;
+>>>>>>> c5970018c07259f54875c5824d1834635ff22554
   z-index: 2;
   text-align: center;
   width: 960px;
@@ -245,6 +264,7 @@ input[type=submit]:active {
   display: block;
   color: #DA4F49;
 }
+
 
 
 /************************************************************************************
