@@ -105,7 +105,7 @@ http://baijs.nl/tinycarousel/
 .pager {list-style: none; display: inline-block; padding: 0;}
 .pager ul {list-style: none}
 .pager li { float: left; margin: 0, 0.15em;}
-.pagenum { background-color: #aaaaaa; opacity: .5; text-decoration: none; text-align: center; padding: 5px; color: #555555; font-size: 14px; font-weight: bold; display: block; }
+.pagenum {opacity: .5; text-decoration: none; text-align: center; padding: 5px; color: #555555; font-size: 14px; font-weight: bold; display: block; }
 .active { color: #fff; background-color:  #555555; }
 
 /* -----------------------------------------
