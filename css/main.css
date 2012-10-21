@@ -102,23 +102,10 @@ http://baijs.nl/tinycarousel/
 .navigation {
   margin: 0 auto;
 }
-<<<<<<< HEAD
-
-#pager-wrap {
-  float: left;
-  margin: auto;
-}
-
-.pager { overflow:hidden; list-style: none; clear: both; margin: 0 0 0 45px; }
-.pager {list-style-type: none; float: left; margin: 0px; padding: 0px; }
-.pager li { float: left; margin: 0, 0.15em; padding: 0;}
-.pagenum {  text-decoration: none; text-align: center; padding: 5px; color: #555555; font-size: 14px; font-weight: bold; display: block; }
-=======
 .pager {list-style: none; display: inline-block; padding: 0;}
 .pager ul {list-style: none}
 .pager li { float: left; margin: 0, 0.15em;}
 .pagenum { background-color: #aaaaaa; opacity: .5; text-decoration: none; text-align: center; padding: 5px; color: #555555; font-size: 14px; font-weight: bold; display: block; }
->>>>>>> aa6b914fd0430f8f10c6105fb95aab42e2b7a6e3
 .active { color: #fff; background-color:  #555555; }
 
 /* -----------------------------------------
@@ -210,14 +197,7 @@ table{
   margin: 0 auto;
 }
 #login-container
-<<<<<<< HEAD
-{
-
-  position: absolute;
-  top: 50px;
-=======
   { 
->>>>>>> aa6b914fd0430f8f10c6105fb95aab42e2b7a6e3
   z-index: 2;
   text-align: center;
   width: 960px;
