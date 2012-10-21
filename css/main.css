@@ -203,14 +203,10 @@ table{
   margin: 0 auto;
 }
 #login-container
-<<<<<<< HEAD
-  { 
-=======
-  {
+{
 
   position: absolute;
   top: 50px;
->>>>>>> c5970018c07259f54875c5824d1834635ff22554
   z-index: 2;
   text-align: center;
   width: 960px;
