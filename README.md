@@ -22,6 +22,8 @@ Our web app allows ischool students to signup and login with their ischool usern
 Javascript, Fusion Tables, Python, HTML, CSS
 
 ### URL
+http://people.ischool.berkeley.edu/~hintzemichael/Awesome-Project/
+
 Git: https://github.com/hintzemichael/Awesome-Project.git
 
 ### Browser Support
